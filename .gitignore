@@ -1,0 +1,13 @@
+*
+
+!.gitignore
+!.re-mote
+
+!Assets/
+!Assets/**/*
+
+!Packages/
+!Packages/**/*
+
+!ProjectSettings/
+!ProjectSettings/**/*
