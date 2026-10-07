@@ -1,7 +1,9 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
+    public GameObject Lazer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -11,6 +13,7 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    //movment 
         Vector2 direction = Vector2.zero;
 
         bool pressingW = Input.GetKey(KeyCode.W);
@@ -28,6 +31,14 @@ public class PlayerMove : MonoBehaviour
         
         transform.Translate(direction * 1 * Time.deltaTime);
 
+    //lazer
+    bool pressingSpace = Input.GetKey(KeyCode.Space);
+    if (pressingSpace == true)
+     
+     Instantiate(Lazer, transform.position, quaternion.identity);
+     
+        
+    
 
 
 
