@@ -3,25 +3,23 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    public Vector3 WorldToScreenPoint(Vector3 position, Camera.MonoOrStereoscopicEye eye)
-    {
-        throw new System.NotImplementedException();
-    }
+    public float player_speed = 5.0f;
     public GameObject Lazer;
+     public Transform ghost;
     [SerializeField] float lazer_input_delay;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
      float lazer_input_timer = 5.0f;
-    
+
     void Start()
     {
-       this.transform.position = new Vector2(0,0); 
+       this.transform.position = new Vector2(0,0);
     }
 
     // Update is called once per frame
     void Update()
     {
-    //movment 
-    
+    //movment
+
         Vector2 direction = Vector2.zero;
 
         if (Input.GetKey(KeyCode.W) == true
@@ -43,32 +41,42 @@ public class PlayerMove : MonoBehaviour
         if (Input.GetKey(KeyCode.D) == true
         || Input.GetKey(KeyCode.RightArrow) == true)
             direction.x++;
-        
-        transform.Translate(direction * 5 * Time.deltaTime);
-     
-        lazer_input_timer = lazer_input_timer + 5 * Time.deltaTime;
+
+        transform.Translate(direction * player_speed * Time.deltaTime);
+
+        lazer_input_timer = lazer_input_timer + 1 * Time.deltaTime;
         //Debug.Log(lazer_input_timer);
-        
+
         if (Input.GetKey(KeyCode.Space) == true && lazer_input_timer >= lazer_input_delay)
         {
             Instantiate(Lazer, transform.position, quaternion.identity);
             lazer_input_timer = 0.0f;
         }
-        
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
+        //wraparound
         float leftEdge = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
         float rightEdge = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth, 0, 0)).x;
-        
+        float screenWidth = rightEdge - leftEdge;
         if (transform.position.x > rightEdge)
         {
-             transform.position = new Vector2(leftEdge, transform.position.y);
+            transform.position = new Vector2(transform.position.x - screenWidth, transform.position.y);
         }
         if (transform.position.x < leftEdge)
         {
-            transform.position = new Vector2(rightEdge, transform.position.y);
+            transform.position = new Vector2(transform.position.x + screenWidth, transform.position.y);
         }
-        Debug.Log("X: " + transform.position.x);   // sist i Update
-        Debug.Log("Wrap höger!");   // inuti if-satsen för höger sida    
+        //ghost wraparound
+        float ghostX;
+        
+        if (transform.position.x > 0)
+
+        {
+            ghostX = transform.position.x - screenWidth;
+        }
+        else
+        {
+            ghostX = transform.position.x + screenWidth;
+        }
+        ghost.position = new Vector2(ghostX, transform.position.y);
 
 
 
