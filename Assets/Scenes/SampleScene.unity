@@ -140,6 +140,7 @@ MonoBehaviour:
   EnemyGhost: {fileID: 570017414}
   EnemyGhostDiagonal: {fileID: 1136401837}
   EnemyGhostVertical: {fileID: 501240105}
+  Player: {fileID: 0}
   hober_pointers: 2
 --- !u!1 &501240104
 GameObject:
@@ -1025,7 +1026,7 @@ GameObject:
   - component: {fileID: 2036099630}
   m_Layer: 0
   m_Name: player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

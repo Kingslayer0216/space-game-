@@ -9,17 +9,20 @@ public class Enemy : MonoBehaviour
     [SerializeField] Transform EnemyGhost;
     [SerializeField] Transform EnemyGhostDiagonal;
     [SerializeField] Transform EnemyGhostVertical;  
+    [SerializeField] Transform Player;
 
         public int hober_pointers = 2;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        Player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     // Update is called once per frame
     void Update()
     {     
+        
+
 #region wraparound
         float leftEdge = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
         float rightEdge = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth, 0, 0)).x; 
@@ -72,13 +75,18 @@ public class Enemy : MonoBehaviour
         }
 #endregion
 #region Enemy movement 
-        transform.Translate(Vector2.down * enemy_speed * Time.deltaTime);
+        transform.Translate(Vector2.up * enemy_speed * Time.deltaTime);
 #endregion
 #region Enemy death 
         if (hober_pointers <= 0)
         {
             Destroy(gameObject);
         }
+#endregion
+#region Enemy aim
+        Vector2 direction = Player.position - transform.position;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
 #endregion
     }
 }

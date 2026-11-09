@@ -6,6 +6,9 @@ public class PlayerMove : MonoBehaviour
      [Header("Player Movement Settings")]
     [SerializeField] float player_rotation_speed = 50.0f;
     [SerializeField] float player_speed = 5.0f;
+    [Header("Player Acceleration Settings")]
+    [SerializeField] float player_acceleration = 2.0f;
+    [SerializeField] float player_deceleration = 2.0f;
     [Header("Player Boost Settings")]
     [SerializeField] float player_boost_speed = 10.0f;
     [Header("Player Lazer Settings")]
@@ -19,6 +22,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] float lazer_input_delay;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
      float lazer_input_timer = 5.0f;
+     [SerializeField] Vector2 player_velocity;
     InputSystem_Actions actions;
     void Awake()
     {
@@ -48,12 +52,28 @@ public class PlayerMove : MonoBehaviour
         float downEdge = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).y;
         float upEdge = Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight, 0)).y;
         float screenHeight = upEdge - downEdge;
-
+#region player boost
         float player_boost = player_speed;
         if (actions.Player.Boost.IsPressed())
         {
             player_boost = player_speed + player_boost_speed;
         }
+#endregion
+#region player acceleration
+        Vector2 input = actions.Player.Movement.ReadValue<Vector2>();
+
+        if (input.magnitude > 0.1f)
+        {
+            player_velocity = Vector2.MoveTowards(player_velocity, input * player_boost, player_acceleration * Time.deltaTime);
+        }
+        else
+        {
+            player_velocity = Vector2.MoveTowards(player_velocity, Vector2.zero, player_deceleration * Time.deltaTime);
+        }
+
+        transform.Translate(player_velocity * Time.deltaTime, Space.World);
+#endregion
+
 #region gamepad movment
         transform.Translate( actions.Player.Movement.ReadValue<Vector2>()* player_boost * Time.deltaTime, Space.World);
         Vector2 look = actions.Player.LookPad.ReadValue<Vector2>();
@@ -74,6 +94,7 @@ public class PlayerMove : MonoBehaviour
             lazer_input_timer = 0.0f;
         }
 #endregion
+
 #region wraparound
         if (transform.position.x > rightEdge)
         {
