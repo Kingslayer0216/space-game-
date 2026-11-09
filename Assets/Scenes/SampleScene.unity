@@ -1122,11 +1122,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::playermove
   player_rotation_speed: 100
   player_speed: 5
+  player_boost_speed: 10
   Lazer: {fileID: 6279113131139082849, guid: e8320b08ef82df2d986db7b4fa5a74f7, type: 3}
   ghost: {fileID: 502353865}
   ghostDiagonal: {fileID: 600926420}
   ghostVertical: {fileID: 1781412596}
-  lazer_input_delay: 2
+  lazer_input_delay: 0.2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

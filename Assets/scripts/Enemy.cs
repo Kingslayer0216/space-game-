@@ -20,13 +20,14 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {     
-        //wraparound
+#region wraparound
         float leftEdge = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
         float rightEdge = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth, 0, 0)).x; 
         float downEdge = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).y;
         float upEdge = Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight, 0)).y;
         float screenWidth = rightEdge - leftEdge;
         float screenHeight = upEdge - downEdge;
+#endregion
 #region Ghost wraparound
         float ghostX;
         float ghostY;
@@ -47,26 +48,27 @@ public class Enemy : MonoBehaviour
             ghostY = transform.position.y + screenHeight;
         }
 #endregion
+#region Ghost movement
         EnemyGhost.position = new Vector2(ghostX, transform.position.y);
         EnemyGhostDiagonal.position = new Vector2(ghostX, ghostY);
         EnemyGhostVertical.position = new Vector2(transform.position.x, ghostY);
-
+#endregion
 #region enemy wraparound
         if(transform.position.x > rightEdge)
         {
-            transform.position = new Vector2(leftEdge, transform.position.y);
+            transform.position = new Vector2(transform.position.x - screenWidth, transform.position.y);
         }
         else if (transform.position.x < leftEdge)
         {
-            transform.position = new Vector2(rightEdge, transform.position.y);
+            transform.position = new Vector2(transform.position.x + screenWidth, transform.position.y);
         }
         if(transform.position.y < downEdge)
         {
-            transform.position = new Vector2(transform.position.x, upEdge);
+            transform.position = new Vector2(transform.position.x,transform.position.y + screenHeight);
         }
         else if (transform.position.y > upEdge)
         {
-            transform.position = new Vector2(transform.position.x, downEdge);
+            transform.position = new Vector2(transform.position.x, transform.position.y - screenHeight);
         }
 #endregion
 #region Enemy movement 
